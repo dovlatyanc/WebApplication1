@@ -9,23 +9,23 @@ namespace MovieApi.Controllers
     [Route("api/[controller]")]
     public class FilmsController : ControllerBase
     {
-        private readonly IFilmRepository _repository;
+        private readonly IFilmRepository repository;
 
         public FilmsController(IFilmRepository repository)
         {
-            _repository = repository;
+            this.repository = repository;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Film>> GetAll()
         {
-            return Ok(_repository.GetAllFilms());
+            return Ok(repository.GetAllFilms());
         }
 
         [HttpGet("{id}")]
         public ActionResult<Film> GetById(int id)
         {
-            var film = _repository.GetFilmById(id);
+            var film = repository.GetFilmById(id);
             if (film == null)
                 return NotFound();
             return Ok(film);
@@ -34,7 +34,7 @@ namespace MovieApi.Controllers
         [HttpPost]
         public ActionResult<Film> Create([FromBody] Film film)
         {
-            _repository.AddFilm(film);
+            repository.AddFilm(film);
             return CreatedAtAction(nameof(GetById), new { id = film.Id }, film);
         }
 
@@ -44,14 +44,14 @@ namespace MovieApi.Controllers
             if (film.Id != id)
                 return BadRequest();
 
-            _repository.UpdateFilm(film);
+            repository.UpdateFilm(film);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _repository.DeleteFilm(id);
+            repository.DeleteFilm(id);
             return NoContent();
         }
     }
