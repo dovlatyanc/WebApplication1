@@ -9,5 +9,9 @@ namespace MovieApi.Repositories
         void AddFilm(Film film);
         void UpdateFilm(Film film);
         void DeleteFilm(int id);
+
+        // Методы поиска
+        IEnumerable<Film> Search(string query);
+        IEnumerable<Session> GetAllSessions();
     }
 }

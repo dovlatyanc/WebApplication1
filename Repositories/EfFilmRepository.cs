@@ -50,5 +50,27 @@ namespace MovieApi.Repositories
                 context.SaveChanges();
             }
         }
+
+        public IEnumerable<Film> Search(string query)
+        {
+            var lowerQuery = query.ToLower();
+
+            return context.Films
+                .Include(f => f.Sessions)
+                .Where(f =>
+                    f.Title.ToLower().Contains(lowerQuery) ||
+                    f.Director.ToLower().Contains(lowerQuery) ||
+                    f.Style.ToLower().Contains(lowerQuery) ||
+                    f.Description.ToLower().Contains(lowerQuery) ||
+                    f.Sessions.Any(s => s.Time.ToString().Contains(query))
+                ).ToList();
+        }
+
+        public IEnumerable<Session> GetAllSessions()
+        {
+            return context.Sessions
+                .Include(s => s.Film)
+                .ToList();
+        }
     }
 }
